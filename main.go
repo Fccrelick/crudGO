@@ -1,9 +1,7 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/Fccrelick/crudGO/src/controller/routes"
 	"github.com/gin-gonic/gin"
@@ -20,7 +18,7 @@ func main() {
 
 	routes.InitRoutes(&router.RouterGroup)
 
-	router.Run(":8080"); err != nil {
+	if err := router.Run(":8080"); err != nil {
 		log.Fatal(err)
 	}
 }
