@@ -7,21 +7,18 @@ import (
 	"github.com/Fccrelick/crudGO/src/configuration/validation"
 	"github.com/Fccrelick/crudGO/src/controller/model/request"
 	"github.com/Fccrelick/crudGO/src/model"
-	"github.com/Fccrelick/crudGO/src/model/service"
+	"github.com/Fccrelick/crudGO/src/view"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap/zapcore"
+	"go.uber.org/zap"
 )
 
 var (
 	UserDomainInterface model.UserDomainInterface
 )
 
-func CreateUser(c *gin.Context) {
+func (uc *userControllerInterface) CreateUser(c *gin.Context) {
 	logger.Info("Init CreateUser controller",
-		zapcore.Field{
-			Key:    "journey",
-			String: "createUser",
-		},
+		zap.String("journey", "createUser"),
 	)
 	var userRequest request.UserRequest
 
@@ -39,17 +36,17 @@ func CreateUser(c *gin.Context) {
 		userRequest.Name,
 		userRequest.Age,
 	)
-	service := service.NewUserDomainService()
-	if err := service.CreateUser(domain); err != nil {
+	if err := uc.service.CreateUser(domain); err != nil {
 		c.JSON(err.Code, err)
 		return
 	}
 
-	logger.Info("User created successfully",
-		zapcore.Field{
-			Key:    "journey",
-			String: "createUser",
-		},
-	)
-	c.String(http.StatusOK, "")
+	logger.Info(
+		"CreateUser controller executed successfully",
+		zap.String("userId", "0"),
+		zap.String("journey", "createUser"))
+
+	c.JSON(http.StatusOK, view.ConvertDomainToResponse(
+		domain,
+	))
 }
