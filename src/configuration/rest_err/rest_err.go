@@ -1,15 +1,12 @@
 package rest_err
 
-import (
-	"net/http"
-
-)
+import "net/http"
 
 type RestErr struct {
 	Message	string `json:"message"`
 	Err	string `json:"error"`
 	Code int `json:"code"`
-	causes []Causes `json:"causes"`
+	Causes []Causes `json:"causes"`
 }
 
 type Causes struct {
@@ -26,7 +23,7 @@ func NewRestErr(message, err string, code int, causes []Causes) *RestErr {
 		Message: message,
 		Err: err,
 		Code: code,
-		causes: causes,
+		Causes: causes,
 	}
 }
 
@@ -43,7 +40,7 @@ func NewBadRequestValidationError(message string, causes []Causes) *RestErr {
 		Message: message,
 		Err: "bad_request",
 		Code: http.StatusBadRequest,
-		causes: causes,
+		Causes: causes,
 	}
 }
 
