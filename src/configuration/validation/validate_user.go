@@ -14,7 +14,7 @@ import (
 
 var (
 	Validate = validator.New()
-	transl ut.Translator
+	transl   ut.Translator
 )
 
 func init() {
@@ -38,9 +38,9 @@ func ValidateUserError(
 		errorsCauses := []rest_err.Causes{}
 
 		for _, e := range validation_err.(validator.ValidationErrors) {
-			cause := rest_err.Causes {
+			cause := rest_err.Causes{
 				Message: e.Translate(transl),
-				Field: e.Field(),
+				Field:   e.Field(),
 			}
 			errorsCauses = append(errorsCauses, cause)
 		}

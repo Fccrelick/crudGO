@@ -6,5 +6,4 @@ func FindUserByID(c *gin.Context) {
 
 }
 
-
 func FindUserByEmail(c *gin.Context) {}
