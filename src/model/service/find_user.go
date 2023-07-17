@@ -21,3 +21,12 @@ func (ud *userDomainService) FindUserByIDServices(
 
 	return ud.userRepository.FindUserByID(id)
 }
+
+func (ud *userDomainService) findUserByEmailAndPasswordServices(
+	email string,
+	password string,
+) (model.UserDomainInterface, *rest_err.RestErr) {
+	logger.Info("Init FindUserByEmailAndPassword Services")
+
+	return ud.userRepository.FindUserByEmailAndPassword(email, password)
+}
