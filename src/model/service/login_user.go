@@ -9,7 +9,7 @@ import (
 
 func (ud *userDomainService) LoginUserServices(
 	userDomain model.UserDomainInterface,
-) (model.UserDomainInterface, *rest_err.RestErr) {
+) (model.UserDomainInterface, string, *rest_err.RestErr) {
 
 	logger.Info("Init LoginUser model",
 		zap.String("journey", "LoginUser"))
@@ -21,8 +21,13 @@ func (ud *userDomainService) LoginUserServices(
 		userDomain.GetPassword(),
 	)
 	if err != nil {
-		return nil, rest_err.NewBadRequestError("Email is already registered in another account")
+		return nil, "", err
 	}
 
-	return user, nil
+	token, err := user.GenerateToken()
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, token, nil
 }
