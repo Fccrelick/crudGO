@@ -1,5 +1,38 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
 
-func (uc *userControllerInterface) DeleteUser(c *gin.Context) {}
+	"github.com/Fccrelick/crudGO/src/configuration/logger"
+	"github.com/Fccrelick/crudGO/src/configuration/rest_err"
+	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
+)
+
+func (uc *userControllerInterface) DeleteUser(c *gin.Context) {
+	logger.Info("Init DeleteUser controller",
+		zap.String("journey", "DeleteUser"),
+	)
+
+	userId := c.Param("userId")
+	if _, err := primitive.ObjectIDFromHex(userId); err != nil {
+		errRest := rest_err.NewBadRequestError("Invalid userId, must be a hex value")
+		c.JSON(errRest.Code, errRest)
+	}
+
+	err := uc.service.DeleteUser(userId)
+	if err != nil {
+		logger.Error("Error trying to call DeleteUser service", err,
+			zap.String("journey", "DeleteUser"))
+		c.JSON(err.Code, err)
+		return
+	}
+
+	logger.Info(
+		"DeleteUser controller executed successfully",
+		zap.String("userId", userId),
+		zap.String("journey", "DeleteUser"))
+
+	c.Status(http.StatusOK)
+}
